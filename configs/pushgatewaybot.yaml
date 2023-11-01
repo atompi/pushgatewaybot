@@ -1,10 +1,10 @@
 ---
 pushgateway:
   url: https://localhost:9091
-  insecureSkipVerify: false
-  caFile: "./ca.crt"
-  certFile: "./server.crt"
-  keyFile: "./server.key"
+  insecure_skip_verify: false
+  ca_path: "./ca.crt"
+  cert_path: "./server.crt"
+  key_path: "./server.key"
   auth:
     username: pushgateway
     password: pushgateway

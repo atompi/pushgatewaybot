@@ -21,7 +21,7 @@ func Execute(opts options.Options) {
 	for _, exporter := range opts.Exporters {
 		c := cron.New(cron.WithSeconds())
 		r := rand.New(rand.NewSource(time.Now().UnixNano()))
-		t := fmt.Sprintf("%s/%s * * * * *", strconv.Itoa(r.Intn(exporter.Interval+1)), strconv.Itoa(exporter.Interval))
+		t := fmt.Sprintf("%s/%s * * * * *", strconv.Itoa(r.Intn(exporter.Interval)), strconv.Itoa(exporter.Interval))
 		c.AddFunc(t, func() {
 			metricsURL := exporter.URL
 			metricsResp, err := http.Get(metricsURL)
@@ -43,7 +43,7 @@ func Execute(opts options.Options) {
 			}
 			pushURL := opts.Pushgateway.URL + "/metrics/job/edge_node_exporter/instance/" + hostname
 			if strings.HasPrefix(pushURL, "https://") {
-				clientTLSCert, err := tls.LoadX509KeyPair(opts.Pushgateway.CertFile, opts.Pushgateway.KeyFile)
+				clientTLSCert, err := tls.LoadX509KeyPair(opts.Pushgateway.CertPath, opts.Pushgateway.KeyPath)
 				if err != nil {
 					zap.L().Sugar().Errorf("load x509 key pair error: %v", err)
 					return
@@ -54,7 +54,7 @@ func Execute(opts options.Options) {
 					zap.L().Sugar().Errorf("load root ca pool error: %v", err)
 					return
 				}
-				if caCert, err := os.ReadFile(opts.Pushgateway.CAFile); err != nil {
+				if caCert, err := os.ReadFile(opts.Pushgateway.CAPath); err != nil {
 					zap.L().Sugar().Errorf("read ca cert file error: %v", err)
 					return
 				} else if ok := RootCAPool.AppendCertsFromPEM(caCert); !ok {

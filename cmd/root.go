@@ -34,13 +34,10 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pushgatewaybot",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "A tool to push exporter data to pushgateway",
+	Long: `A tool that pushes exporter data to a pushgateway.
+It pulls local exporter metrics on a recurring basis through
+a set timed task and then pushes them to a remote pushgateway.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {

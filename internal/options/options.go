@@ -16,10 +16,10 @@ type PushgatewayAuthOptions struct {
 
 type PushgatewayOptions struct {
 	URL                string                 `yaml:"url"`
-	InsecureSkipVerify bool                   `yaml:"insecureSkipVerify"`
-	CAFile             string                 `yaml:"caFile"`
-	CertFile           string                 `yaml:"certFile"`
-	KeyFile            string                 `yaml:"keyFile"`
+	InsecureSkipVerify bool                   `yaml:"insecure_skip_verify"`
+	CAPath             string                 `yaml:"ca_path"`
+	CertPath           string                 `yaml:"cert_path"`
+	KeyPath            string                 `yaml:"key_path"`
 	Auth               PushgatewayAuthOptions `yaml:"auth"`
 }
 
