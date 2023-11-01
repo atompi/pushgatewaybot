@@ -1,0 +1,17 @@
+---
+pushgateway:
+  url: https://localhost:9091
+  insecureSkipVerify: false
+  caFile: "./ca.crt"
+  certFile: "./server.crt"
+  keyFile: "./server.key"
+  auth:
+    username: pushgateway
+    password: pushgateway
+exporters:
+  - name: node_exporter
+    url: http://localhost:9100/metrics
+    interval: 60
+log:
+  level: INFO
+  path: ./pushgatewaybot.log
