@@ -80,6 +80,7 @@ func Execute(opts options.Options) {
 				zap.L().Sugar().Errorf("new push post request error: %v", err)
 				return
 			}
+			pushReq.Close = true
 			auth := opts.Pushgateway.Auth.Username + ":" + opts.Pushgateway.Auth.Password
 			basicAuth := "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))
 			pushReq.Header.Set("Authorization", basicAuth)
