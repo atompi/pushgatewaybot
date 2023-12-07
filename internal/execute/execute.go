@@ -32,7 +32,7 @@ func (j JobOptions) Run() {
 	}
 	defer metricsResp.Body.Close()
 	if metricsResp.StatusCode != http.StatusOK {
-		zap.L().Sugar().Errorf("get metrics error: %v", err)
+		zap.L().Sugar().Errorf("get metrics error: %v, code: %v", err, metricsResp.StatusCode)
 		return
 	}
 
@@ -93,7 +93,7 @@ func (j JobOptions) Run() {
 	}
 	defer pushResp.Body.Close()
 	if pushResp.StatusCode != http.StatusOK {
-		zap.L().Sugar().Errorf("push metrics error: %v", err)
+		zap.L().Sugar().Errorf("push metrics error: %v, code: %v", err, pushResp.StatusCode)
 		return
 	}
 }
