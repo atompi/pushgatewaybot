@@ -92,7 +92,7 @@ func (j JobOptions) Run() {
 		return
 	}
 	defer pushResp.Body.Close()
-	if pushResp.StatusCode != http.StatusOK {
+	if pushResp.StatusCode != http.StatusOK && pushResp.StatusCode != http.StatusAccepted {
 		zap.L().Sugar().Errorf("push metrics error: %v, code: %v", err, pushResp.StatusCode)
 		return
 	}
