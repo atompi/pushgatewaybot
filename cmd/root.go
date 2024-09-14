@@ -21,7 +21,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	logkit "gitee.com/autom-studio/go-kits/log"
+	logkit "github.com/atompi/go-kits/log"
 	"github.com/atompi/pushgatewaybot/internal/execute"
 	"github.com/atompi/pushgatewaybot/internal/options"
 	"github.com/spf13/cobra"
@@ -43,9 +43,12 @@ a set timed task and then pushes them to a remote pushgateway.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		opts := options.NewOptions()
 
-		logPath := opts.Log.Path
-		logLevel := opts.Log.Level
-		logger := logkit.InitLogger(logPath, logLevel)
+		level := opts.Log.Level
+		path := opts.Log.Path
+		maxSize := opts.Log.MaxSize
+		maxAge := opts.Log.MaxAge
+		compress := opts.Log.Compress
+		logger := logkit.InitLogger(level, path, maxSize, maxAge, compress)
 		defer logger.Sync()
 		undo := zap.ReplaceGlobals(logger)
 		defer undo()

@@ -1,2 +1,2 @@
-pushgatewaybot
-*.log
+/examples/*
+!/pushgatewaybot.yaml.example

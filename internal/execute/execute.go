@@ -23,43 +23,43 @@ type JobOptions struct {
 }
 
 func (j JobOptions) Run() {
-	zap.L().Sugar().Infof("pushing %v metrics to pushgateway", j.Exporter.Name)
+	zap.S().Infof("pushing %v metrics to pushgateway", j.Exporter.Name)
 	metricsURL := j.Exporter.URL
 	metricsResp, err := http.Get(metricsURL)
 	if err != nil {
-		zap.L().Sugar().Errorf("get metrics error: %v", err)
+		zap.S().Errorf("get metrics error: %v", err)
 		return
 	}
 	defer metricsResp.Body.Close()
 	if metricsResp.StatusCode != http.StatusOK {
-		zap.L().Sugar().Errorf("get metrics error: %v, code: %v", err, metricsResp.StatusCode)
+		zap.S().Errorf("get metrics error: %v, code: %v", err, metricsResp.StatusCode)
 		return
 	}
 
 	pushClient := &http.Client{}
 	hostname, err := os.Hostname()
 	if err != nil {
-		zap.L().Sugar().Errorf("get hostname error: %v", err)
+		zap.S().Errorf("get hostname error: %v", err)
 		return
 	}
 	pushURL := j.Pushgateway.URL + "/metrics/job/edge_" + j.Exporter.Name + "/instance/" + hostname
 	if strings.HasPrefix(pushURL, "https://") {
 		clientTLSCert, err := tls.LoadX509KeyPair(j.Pushgateway.CertPath, j.Pushgateway.KeyPath)
 		if err != nil {
-			zap.L().Sugar().Errorf("load x509 key pair error: %v", err)
+			zap.S().Errorf("load x509 key pair error: %v", err)
 			return
 		}
 
 		RootCAPool, err := x509.SystemCertPool()
 		if err != nil {
-			zap.L().Sugar().Errorf("load root ca pool error: %v", err)
+			zap.S().Errorf("load root ca pool error: %v", err)
 			return
 		}
 		if caCert, err := os.ReadFile(j.Pushgateway.CAPath); err != nil {
-			zap.L().Sugar().Errorf("read ca cert file error: %v", err)
+			zap.S().Errorf("read ca cert file error: %v", err)
 			return
 		} else if ok := RootCAPool.AppendCertsFromPEM(caCert); !ok {
-			zap.L().Sugar().Errorf("append ca cert to cert pool error: %v", err)
+			zap.S().Errorf("append ca cert to cert pool error: %v", err)
 			return
 		}
 
@@ -78,7 +78,7 @@ func (j JobOptions) Run() {
 
 	pushReq, err := http.NewRequest(http.MethodPost, pushURL, metricsResp.Body)
 	if err != nil {
-		zap.L().Sugar().Errorf("new push post request error: %v", err)
+		zap.S().Errorf("new push post request error: %v", err)
 		return
 	}
 	pushReq.Close = true
@@ -88,12 +88,12 @@ func (j JobOptions) Run() {
 
 	pushResp, err := pushClient.Do(pushReq)
 	if err != nil {
-		zap.L().Sugar().Errorf("push metrics error: %v", err)
+		zap.S().Errorf("push metrics error: %v", err)
 		return
 	}
 	defer pushResp.Body.Close()
 	if pushResp.StatusCode != http.StatusOK && pushResp.StatusCode != http.StatusAccepted {
-		zap.L().Sugar().Errorf("push metrics error: %v, code: %v", err, pushResp.StatusCode)
+		zap.S().Errorf("push metrics error: %v, code: %v", err, pushResp.StatusCode)
 		return
 	}
 }

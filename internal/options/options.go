@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Version string = "v0.0.1"
+var Version string = "v1.0.0"
 
 type PushgatewayAuthOptions struct {
 	Username string `yaml:"username"`
@@ -30,8 +30,11 @@ type ExporterOptions struct {
 }
 
 type LogOptions struct {
-	Level string `yaml:"level"`
-	Path  string `yaml:"path"`
+	Level    string `yaml:"level"`
+	Path     string `yaml:"path"`
+	MaxSize  int    `yaml:"maxsize"`
+	MaxAge   int    `yaml:"maxage"`
+	Compress bool   `yaml:"compress"`
 }
 
 type Options struct {

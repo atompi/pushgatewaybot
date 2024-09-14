@@ -14,4 +14,7 @@ exporters:
     interval: 60
 log:
   level: INFO
-  path: ./pushgatewaybot.log
+  path: ./logs/pushgatewaybot
+  maxsize: 100
+  maxage: 7
+  compress: true
